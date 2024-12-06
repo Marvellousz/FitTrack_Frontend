@@ -1,38 +1,38 @@
-import { useWorkoutsContext } from '../hooks/useWorkoutsContext';
-import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import { Link } from 'react-router-dom'
+import { useLogout } from '../hooks/useLogout'
+import { useAuthContext } from '../hooks/useAuthContext'
 
-const WorkoutDetails = ({ workout }) => {
-  const { dispatch } = useWorkoutsContext();
-  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const Navbar = () => {
+  const { logout } = useLogout()
+  const { user } = useAuthContext()
 
-  const handleClick = async () => {
-    const response = await fetch(`${BACKEND_URL}/api/workouts/${workout._id}`, {
-      method: 'DELETE',
-    });
-    const json = await response.json();
-
-    if (response.ok) {
-      dispatch({ type: 'DELETE_WORKOUT', payload: json });
-    }
-  };
+  const handleClick = () => {
+    logout()
+  }
 
   return (
-    <div className="workout-details">
-      <h4>{workout.title}</h4>
-      <p>
-        <strong>Load (kg): </strong>
-        {workout.load}
-      </p>
-      <p>
-        <strong>Number of reps: </strong>
-        {workout.reps}
-      </p>
-      <p>{formatDistanceToNow(new Date(workout.createdAt), { addSuffix: true })}</p>
-      <span className="material-symbols-outlined" onClick={handleClick}>
-        delete
-      </span>
-    </div>
-  );
-};
+    <header>
+      <div className="container">
+        <Link to="/">
+          <h1>FitTrack</h1>
+        </Link>
+        <nav>
+          {user && (
+            <div>
+              <span>{user.email}</span>
+              <button onClick={handleClick}>Log out</button>
+            </div>
+          )}
+          {!user && (
+            <div>
+              <Link to="/login">Login</Link>
+              <Link to="/signup">Signup</Link>
+            </div>
+          )}
+        </nav>
+      </div>
+    </header>
+  )
+}
 
-export default WorkoutDetails;
+export default Navbar
