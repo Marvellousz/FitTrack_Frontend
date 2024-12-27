@@ -1,4 +1,4 @@
-# Fitness Tracker Frontend
+# FitTrack Frontend
 
 A modern and responsive fitness tracker website built using React. This frontend application allows users to monitor their fitness goals, track workout progress, and manage their health data effectively.
 
